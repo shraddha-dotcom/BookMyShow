@@ -8,7 +8,16 @@ const BookingForm = ({ setLastBooking }) => {
         JSON.parse(localStorage.getItem("seats")) || {}
     );
 
-    // Save selection to localStorage
+
+    // Load last booking on mount only
+    useEffect(() => {
+        const savedBooking = localStorage.getItem("lastBooking");
+        if (savedBooking) {
+            setLastBooking(JSON.parse(savedBooking));
+        }
+    }, []);
+
+    // Save selection to localStorage((without affecting last booking))
     useEffect(() => {
         localStorage.setItem("movie", selectedMovie);
         localStorage.setItem("slot", selectedSlot);
@@ -40,13 +49,18 @@ const BookingForm = ({ setLastBooking }) => {
             if (response.ok) {
                 const newBooking = await response.json();
                 setLastBooking(newBooking);  //Update last booking state directly using POST response
+                localStorage.setItem("lastBooking", JSON.stringify(newBooking));  //Save last booking in localStorage
                 alert("Booking successful!");
 
-                // Clear form & localStorage after successful booking
+                // Reset state without clearing last booking
                 setSelectedMovie("");
                 setSelectedSlot("");
                 setSeats({});
-                localStorage.clear();
+                localStorage.removeItem("movie");
+                localStorage.removeItem("slot");
+                localStorage.removeItem("seats");
+
+
             }
         } catch (error) {
             console.error("Error:", error);

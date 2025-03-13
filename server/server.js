@@ -9,7 +9,11 @@ require("dotenv").config();
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(cors({
+    origin: ["https://bookmyshow-front.netlify.app"], // Allow requests only from your Netlify frontend URL
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+  }));
 app.use(express.json());
 app.use("/api", bookingRoutes)
 
