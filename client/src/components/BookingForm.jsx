@@ -31,7 +31,7 @@ const BookingForm = ({ setLastBooking }) => {
         }
 
         try {
-            const response = await fetch("/api/booking", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/booking`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ movie: selectedMovie, slot: selectedSlot, seats }),
