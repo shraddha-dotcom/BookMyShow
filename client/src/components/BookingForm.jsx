@@ -8,21 +8,37 @@ const BookingForm = ({ setLastBooking }) => {
         JSON.parse(localStorage.getItem("seats")) || {}
     );
 
-
-    // Load last booking on mount only
+    //  Load last booking on page load using GET request
     useEffect(() => {
-        const savedBooking = localStorage.getItem("lastBooking");
-        if (savedBooking) {
-            setLastBooking(JSON.parse(savedBooking));
-        }
-    }, []);
+        const fetchLastBooking = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/booking`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
 
-    // Save selection to localStorage((without affecting last booking))
+                if (response.ok) {
+                    const lastBooking = await response.json();
+                    setLastBooking(lastBooking);
+                    localStorage.setItem("lastBooking", JSON.stringify(lastBooking));
+                } else {
+                    console.log("No previous booking found");
+                }
+            } catch (error) {
+                console.error("Error fetching last booking:", error);
+            }
+        };
+
+        fetchLastBooking(); //  Trigger GET on page load
+    }, [setLastBooking]);
+
+    //  Save temporary selection to localStorage
     useEffect(() => {
         localStorage.setItem("movie", selectedMovie);
         localStorage.setItem("slot", selectedSlot);
         localStorage.setItem("seats", JSON.stringify(seats));
     }, [selectedMovie, selectedSlot, seats]);
+
 
     // Handle seat input
     const handleSeatChange = (type, value) => {
@@ -32,7 +48,7 @@ const BookingForm = ({ setLastBooking }) => {
         }));
     };
 
-    // Handle form submission
+    // Handle form submission (POST request)
     const handleSubmit = async () => {
         if (!selectedMovie || !selectedSlot || !Object.values(seats).some(seat => seat > 0)) {
             alert("Please fill all fields");
@@ -114,7 +130,7 @@ const BookingForm = ({ setLastBooking }) => {
                     </div>
                 ))}
             </div>
-
+            {/* book now button */}
             <button
                 onClick={handleSubmit}
                 className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
