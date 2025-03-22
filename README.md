@@ -136,15 +136,15 @@ Response (if no booking exists):
 
 ## Project Structure
 
-bookMyShow/
-│── client/           # Frontend (React Vite)
-│   ├── src/
-│   ├── public/
-│   ├── index.html
-│   ├── package.json
-│── server/           # Backend (Express.js)
-│   ├── models/       # MongoDB models
-│   ├── routes/       # API routes
-│   ├── server.js     # Express server setup
-│   ├── package.json  
-│── README.md         # Project Documentation
+      bookMyShow/
+      │── client/  # Frontend (React Vite)
+      │   ├── src/
+      │   ├── public/
+      │   ├── index.html
+      │   ├── package.json
+      │── server/           # Backend (Express.js)
+      │   ├── models/       # MongoDB models
+      │   ├── routes/       # API routes
+      │   ├── server.js     # Express server setup
+      │   ├── package.json  
+      │── README.md         # Project Documentation
